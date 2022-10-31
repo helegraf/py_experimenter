@@ -1,0 +1,49 @@
+Bootstrap: docker
+From: python:3.8-bullseye
+
+%runscript
+exec echo "The runscript is the containers default runtime command!"
+
+%files
+cmake-3.19.3-Linux-x86_64.sh /
+
+%environment
+
+%labels
+Maintainer fmohr
+
+%post
+# update container
+apt-get update
+
+# prepare for python 3.8
+apt-get -y install software-properties-common
+add-apt-repository ppa:deadsnakes/ppa
+
+apt-get install -y apt-utils
+
+#install packages
+apt-get -y install git
+
+# update pip
+echo "Updating pip\n------------------------------"
+LC_ALL=C.UTF-8 python3.8 -m pip install --upgrade pip
+
+# install cython, numpy and scipy
+echo "Now installing cython, numpy, and scipy\n------------------------------"
+LC_ALL=C.UTF-8 python3.8 -m pip install cython numpy scipy psutil
+
+# install tqdm
+LC_ALL=C.UTF-8 python3.8 -m pip install tqdm
+
+echo "Now installing scikit-learn and openml\n------------------------------"
+LC_ALL=C.UTF-8 python3.8 -m pip install scikit-learn
+LC_ALL=C.UTF-8 python3.8 -m pip install openml
+LC_ALL=C.UTF-8 python3.8 -m pip install py_experimenter
+LC_ALL=C.UTF-8 python3.8 -m pip install mysql-connector-python==8.0.29
+
+# install pebble, matplotlib, func_timeout
+LC_ALL=C.UTF-8 python3.8 -m pip install pebble matplotlib func_timeout psutil
+
+# update PANDAS
+LC_ALL=C.UTF-8 python3.8 -m pip install --upgrade pandas numpy
